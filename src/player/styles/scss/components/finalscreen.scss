@@ -1,0 +1,106 @@
+.video-react.video-react-mobile {
+  .video-react-final-screen__title {
+    font-size: 40px;
+    @media (orientation: portrait) {
+      font-size: 30px;
+    }
+  }
+  .video-react-final-screen__descr {
+    font-size: 18px;
+    @media (orientation: portrait) {
+      font-size: 14px;
+    }
+  }
+  .video-react-final-screen__button {
+    @media (orientation: portrait) {
+      margin-top: 20px;
+      transform: scale(0.7);
+    }
+  }
+}
+
+.video-react {
+  .video-react-final-screen {
+    background-color: rgba(17,19,18, 0.0);
+    visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    z-index:20;
+    opacity: 0;
+    $trans: visibility 1.0s, opacity 1.0s, background-color 1.0s;
+    @include transition($trans);
+
+    &-show {
+      opacity: 1;
+      visibility: visible;
+      background-color: rgba(17,19,18, 0.8);
+    }
+    &__inner {
+      pointer-events: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    &__title {
+      display: flex;
+      justify-content: center;
+      font-family: Inter;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 50px;
+      line-height: 61px;
+      align-items: center;
+      text-align: center;
+      color: #FFFFFF;
+    }
+    &__descr {
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
+      font-family: Inter;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 130%;
+      text-align: center;
+      letter-spacing: 0.02em;
+      color: #FFFFFF;
+    }
+    &__button {
+      margin-top: 50px;
+      cursor: pointer;
+      padding: 15px 30px;
+      outline: none;
+      background: rgba(7, 23, 16, 0.2);
+      justify-content: center;
+      border: 1px solid #FFFFFF;
+      box-sizing: border-box;
+      border-radius: 5px;
+      font-family: Inter;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 120%;
+      display: flex;
+      align-items: center;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      transition: background 0.25s;
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      svg {
+        margin-right: 15px;
+      }
+    }
+  }
+}

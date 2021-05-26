@@ -1,0 +1,192 @@
+.video-react-volume {
+  position: absolute;
+  left: 8px;
+}
+
+.video-react {
+  .MuiSlider-root {
+    color: #fff;
+  }
+  .MuiSlider-rail {
+    height: 3px;
+    border-radius: 2.5px;
+    //background-color: rgba(255, 255, 255, 0.2);
+
+  }
+  .MuiSlider-track {
+    height: 3px;
+    border-radius: 2.5px;
+  }
+  .MuiSlider-thumb {
+    width: 9px;
+    height: 9px;
+    box-shadow: none !important;
+    margin-top: -3px;
+
+  }
+
+  .video-react-menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .video-react-mute-control,
+  .video-react-volume-menu-button {
+    .video-react-menu {
+      display: flex !important;
+      align-items: center;
+      .video-react-menu-content {
+        display: flex !important;
+        align-items: center;
+      }
+      .video-react-volume-bar {
+        width: 100%;
+      }
+    }
+    cursor: pointer;
+    @include flex(none);
+    @extend .video-react-icon;
+    @extend .video-react-icon-volume-up;
+
+    &.video-react-vol-0 {
+      @extend .video-react-icon-volume-mute;
+    }
+    &.video-react-vol-1 {
+      @extend .video-react-icon-volume-down;
+    }
+    &.video-react-vol-2 {
+      @extend .video-react-icon-volume-down;
+    }
+    &.video-react-vol-muted {
+      @extend .video-react-icon-volume-off;
+    }
+  }
+
+  .video-react-volume-control {
+    //width: 5em;
+    @include flex(none);
+    @include display-flex(center);
+  }
+
+  .video-react-volume-bar {
+   //margin: 1.35em 0.45em;
+
+    &.video-react-slider-horizontal {
+      //width: 5em;
+      height: 0.3em;
+
+      .video-react-volume-level {
+        width: 100%;
+      }
+    }
+
+    &.video-react-slider-vertical {
+      width: 0.3em;
+      height: 5em;
+      margin: 1.35em auto;
+
+      .video-react-volume-level {
+        height: 100%;
+      }
+
+    }
+  }
+
+  .video-react-volume-level {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    background-color: $video-react-primary-foreground-color;
+
+    @extend .video-react-icon;
+    @extend .video-react-icon-circle;
+
+    // Volume handle
+    &:before {
+      position: absolute;
+      font-size: 0.9em; // Doing this to match the handle on play progress.
+    }
+  }
+
+
+
+  .video-react-slider-vertical .video-react-volume-level {
+    width: 0.3em;
+
+    // Volume handle
+    &:before {
+      top: -0.5em;
+      left: -0.3em;
+    }
+  }
+
+  .video-react-slider-horizontal .video-react-volume-level {
+    height: 3px;
+
+    // Volume handle
+    &:before {
+      height: 9px;
+      width: 9px;
+      top: -0.3em;
+      right: -0.5em;
+    }
+  }
+
+
+
+  // The volume menu button is like menu buttons (captions/subtitles) but works
+  // a little differently. It needs to be possible to tab to the volume slider
+  // without hitting space bar on the menu button. To do this we're not using
+  // display:none to hide the slider menu by default, and instead setting the
+  // width and height to zero.
+  .video-react-menu-button-popup.video-react-volume-menu-button .video-react-menu {
+    display: block;
+    width: 0;
+    height: 0;
+    border-top-color: transparent;
+  }
+
+  .video-react-menu-button-popup.video-react-volume-menu-button-vertical .video-react-menu {
+    left: 0.5em;
+    height: 8em;
+  }
+  .video-react-menu-button-popup.video-react-volume-menu-button-horizontal .video-react-menu {
+    left: -2em;
+  }
+
+  .video-react-menu-button-popup.video-react-volume-menu-button .video-react-menu-content {
+    height: 0;
+    width: 0;
+
+    // Avoids unnecessary scrollbars in the menu content. Primarily noticed in Chrome on Linux.
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+
+  .video-react-volume-menu-button-vertical .video-react-menu-content,
+  .video-react-volume-menu-button-vertical .video-react-menu-content,
+  .video-react-volume-menu-button-vertical.video-react-slider-active .video-react-menu-content,
+  .video-react-volume-menu-button-vertical .video-react-lock-showing .video-react-menu-content {
+    height: 8em;
+    width: 2.9em;
+  }
+
+  .video-react-volume-menu-button-horizontal .video-react-menu-content,
+  .video-react-volume-menu-button-horizontal .video-react-menu-content,
+  .video-react-volume-menu-button-horizontal .video-react-slider-active .video-react-menu-content,
+  .video-react-volume-menu-button-horizontal .video-react-lock-showing .video-react-menu-content {
+    height: 2.9em;
+    width: 8em;
+    padding: 0 0.6em;
+  }
+
+  .video-react-volume-menu-button.video-react-menu-button-inline .video-react-menu-content {
+    // An inline volume should never have a menu background color.
+    //  This protects it from external changes to background colors.
+    background-color: transparent !important;
+  }
+
+}
+
+

@@ -1,0 +1,183 @@
+.video-react-mobile {
+  .video-react-control-bar {
+    background: none;
+  }
+  .video-react-current-time-display {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .video-react-duration-display {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .video-react-playback-rate {
+    margin-left: 10px;
+    .video-react-menu {
+      bottom: 10px;
+
+    }
+    @media (orientation: portrait) {
+      .video-react-menu {
+        bottom: 15px;
+        left: -15px;
+        transform: scale(0.7);
+      }
+    }
+
+    .video-react-playback-rate-value {
+      height: 26px;
+      width: auto;
+      padding: 0 10px;
+      font-family: Roboto;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 13px;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: #FFFFFF;
+      @media (orientation: portrait) {
+        font-size: 11px;
+      }
+
+    }
+  }
+  .video-react-play-control {
+    display: none;
+  }
+  .video-react-volume-menu-button {
+    display: none;
+  }
+  .video-react-replay-control {
+    display: none;
+  }
+  .video-react-forward-control {
+    display: none;
+  }
+}
+
+.video-react {
+  .video-react-mobile-control {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 10;
+    pointer-events: auto;
+    // Remain visible for screen reader and keyboard users
+    visibility: visible;
+    opacity: 1;
+    $trans: visibility 1.0s, opacity 1.0s, background-color 1.0s;
+    @include transition($trans);
+
+    &-hide {
+      opacity: 0;
+    }
+    &__trigger {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 2
+    }
+
+    &__content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 3;
+      pointer-events: none;
+      visibility: visible;
+      opacity: 1;
+      background-color: rgba(17,19,18, 0.8);
+      $trans: visibility 0.25s, opacity 0.25s, background-color 0.25s;
+      @include transition($trans);
+
+      &_hide {
+        opacity: 0;
+        visibility: hidden;
+        background-color: rgba(17,19,18, 0);
+      }
+    }
+
+    &__inner {
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      pointer-events: none;
+      & > div {
+        pointer-events: auto;
+      }
+      + div {
+        z-index: 11;
+        pointer-events: auto;
+      }
+    }
+    &__playpause {
+      cursor: pointer;
+      position: relative;
+      pointer-events: auto;
+      width: 94px;
+      height: 94px;
+      background: rgba(255,255,255,0.12);
+      border-radius:50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      outline: none;
+      border: none;
+      svg {
+        width: 60%;
+        height: 60%;
+      }
+    }
+    &__back {
+      position: relative;
+      pointer-events: auto;
+      height: 40px;
+      width: 40px;
+      background: none;
+      border: none;
+      svg {
+        top: 0;
+        left: 0;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+      }
+    }
+    &__forward {
+      position: relative;
+      pointer-events: auto;
+      height: 40px;
+      width: 40px;
+      background: none;
+      border: none;
+      svg {
+        top: 0;
+        left: 0;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+      }
+    }
+
+
+  }
+}

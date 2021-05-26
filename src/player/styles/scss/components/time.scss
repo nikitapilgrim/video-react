@@ -1,0 +1,23 @@
+.video-react {
+
+  .video-react-time-control {
+    @include flex(none);
+    display: flex;
+    align-items: center;
+    min-width: 2em;
+    width: auto;
+    padding-left: 1em;
+    padding-right: 1em;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 13px;
+  }
+
+  .video-react-time-divider {
+    line-height: 3em;
+    min-width: initial;
+    padding: 0;
+  }
+}
