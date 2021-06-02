@@ -10,6 +10,7 @@
 
 .video-react-menu {
   .video-react-menu-content {
+    position: relative;
     display: block;
     padding: 0;
     margin: 0;
@@ -25,7 +26,7 @@
     padding: 10px 10px 10px 18px;
     font-family: 'Roboto', sans-serif;
     font-style: normal;
-    font-weight: bold;
+    font-weight: 500;
     font-size: 12px;
     letter-spacing: 0.02em;
 

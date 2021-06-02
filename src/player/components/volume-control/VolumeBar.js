@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
-import React, {Component, useRef, useEffect} from 'react';
+import React, {Component, useRef, useEffect, useState} from 'react';
 import classNames from 'classnames';
 import SliderInput from '@material-ui/core/Slider';
 import { makeStyles } from '@material-ui/core/styles';
 import Slider from '../Slider';
 import VolumeLevel from './VolumeLevel';
 import {useDebounce, useDebounceCallback} from "@react-hook/debounce";
+import useHover from "@react-hook/hover";
 
 const propTypes = {
   actions: PropTypes.object,
@@ -34,6 +35,7 @@ class VolumeBar extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
+
 
   componentDidMount() {}
 
@@ -118,6 +120,7 @@ class VolumeBar extends Component {
         onChange={this.handleChange}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
+        player={player}
       />
 
       /*<Slider
@@ -149,32 +152,41 @@ class VolumeBar extends Component {
   }
 }
 
-const CustomSlider = ({onChange, onFocus, onBlur, value}) => {
+const CustomSlider = ({onChange, onFocus, onBlur, value, player}) => {
  // const [value, setValue] = useDebounce(100, 2000)
+  const ref = useRef();
   const state = useRef(0)
+  const isHovering = useHover(ref, { enterDelay: 0, leaveDelay: 0 });
+  const [changing, setChanging] = useState(false)
+  const wait = useRef();
+
   const handleOnChange = (event, newValue) => {
-    onChange(event, newValue)
+    setChanging(true)
+    onChange(event, newValue);
+    if (wait.current) {
+      clearTimeout(wait.current)
+    }
+    wait.current = setTimeout(() => {
+      setChanging(false)
+    }, 200)
   }
 
-  const handleBlur = () => {
-    console.log('blur')
-    onBlur()
-  }
+  useEffect(() => {
+    if (!changing && !isHovering) {
+      onBlur()
+    }
+  }, [changing,isHovering])
 
-  const handleFocus = () => {
-    console.log('focus')
-
-    onFocus()
-  }
 
   return (
       <SliderInput
+          ref={ref}
           className={'react-player__slider'}
-          onMouseDown={handleFocus}
+        /*  onMouseDown={handleFocus}
           onChangeCommitted={(e) => {
             handleBlur()
-          }}
-          value={Number(value)}
+          }}*/
+          value={player.muted ? 0 : Number(value)}
           onChange={handleOnChange}
           aria-labelledby="continuous-slider"
           /*  onFocus={this.handleFocus}

@@ -1,5 +1,7 @@
 import React from 'react';
-export const IconForward = (props) => {
+import {animated} from 'react-spring'
+
+export const IconForward = ({fill, ...props}) => {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -7,22 +9,22 @@ export const IconForward = (props) => {
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <path
+      <animated.path
         d="M13.298 2l2.273 2.273-2.273 2.273"
-        stroke="#fff"
+        stroke={fill}
         strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path
+      <animated.path
         fillRule="evenodd"
         clipRule="evenodd"
         d="M20.084 11.004c.546-.129 1.1.216 1.155.774a9.286 9.286 0 11-9.24-8.349c1 0 1.96.157 2.862.449.542.175.755.809.495 1.317-.24.471-.809.67-1.317.523a7.286 7.286 0 105.228 6.473c-.038-.54.29-1.063.817-1.187z"
-        fill="#fff"
+        fill={fill}
       />
-      <path
+      <animated.path
         d="M10.065 16.214H9v-5.137l-1.569.536v-.9l2.496-.919h.137v6.42zm5.944-2.693c0 .92-.173 1.614-.519 2.082-.343.466-.866.7-1.569.7-.691 0-1.213-.228-1.564-.682-.349-.457-.528-1.132-.536-2.026v-1.107c0-.92.171-1.61.514-2.07.345-.46.871-.69 1.577-.69.7 0 1.222.224 1.565.672.346.449.523 1.12.532 2.013v1.107zm-1.068-1.196c0-.6-.082-1.04-.246-1.318-.164-.281-.425-.422-.783-.422-.348 0-.605.133-.769.4-.164.264-.25.677-.259 1.24v1.45c0 .597.084 1.042.25 1.335.168.293.43.44.787.44.343 0 .596-.135.76-.405.165-.272.25-.697.26-1.274v-1.446z"
-        fill="#fff"
+        fill={fill}
       />
     </svg>
   );

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component, useEffect, useMemo, useRef, useState } from 'react';
+import React, {Component, useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react';
 import classNames from 'classnames';
 import { IconPlay, IconPlayPause } from '../../icons/Play';
 import { IconPause } from '../../icons/Pause';
@@ -12,6 +12,7 @@ import ReactTooltip from 'react-tooltip';
 import { IconAgain } from '../../icons/Again';
 import {usePlayer} from "../../components/Player";
 import useHover from "@react-hook/hover";
+
 
 const propTypes = {
   actions: PropTypes.object,
@@ -47,14 +48,21 @@ const Icon = posed.path(
 );
 const pause = 'M11,10 L17,10 17,26 11,26 M20,10 L26,10 26,26 20,26';
 const play = 'M11,10 L18,13.74 18,22.28 11,26 M18,13.74 L26,18 26,18 18,22.28';
+// M1 1l12 8-12 8V1z play
+//M2 2v12M10 2v12 pause
 
-export const AnimatedPlayPause = ({ player }) => {
+/* stroke="#fff"
+        strokeWidth={4}
+        strokeLinecap="round"
+        strokeLinejoin="round"*/
+
+export const AnimatedPlayPause = ({ player, isHovering }) => {
   const svg = useRef();
   const flip = useRef(true);
-  const paused = useMemo(() => player.paused, [player]);
+  const paused = useMemo(() => player.paused, [player.paused]);
+
   const { fill } = useSpring({
-    //fill: paused ? '#27AE60' : '#fff',
-    fill: '#fff',
+    fill: isHovering ? '#fff': '#d9d9d9',
   });
   /*const final = useMemo(() => {
     return (
@@ -75,7 +83,7 @@ export const AnimatedPlayPause = ({ player }) => {
       }
     }
   }, [paused]);
-  return <IconPlayPause fill={fill} ref={svg} />;
+  return <IconPlayPause  fill={fill} ref={svg} />;
 };
 
 const isFinal = (player) =>
@@ -94,6 +102,7 @@ export default class PlayToggle extends Component {
 
   handleClick() {
     const { actions, player } = this.props;
+    console.log(player.paused)
     if (player.paused) {
       actions.play();
       this.setState((state) => ({
@@ -138,13 +147,13 @@ const Button = React.forwardRef(({player, onClick, className}, ref) => {
     condition: false,
   };
 
-
   useEffect(() => {
     setActiveTooltip({name: 'playpause',state: isHovering,text: textTooltip(player)})
   }, [isHovering, player])
 
   return (
       <button
+
           /*data-for="play"
           data-tip={textTooltip()}
           data-iscapture="true"*/
@@ -163,10 +172,11 @@ const Button = React.forwardRef(({player, onClick, className}, ref) => {
         {isFinal(player) ? (
             <IconAgain />
         ) : (
-            <AnimatedPlayPause player={player} />
+            <AnimatedPlayPause isHovering={isHovering} player={player} />
         )}
         <span className="video-react-control-text">{controlText}</span>
-      </button>
+      </button
+        >
   )
 })
 

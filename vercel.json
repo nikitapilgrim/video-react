@@ -1,0 +1,19 @@
+{
+  "routes": [
+    { "src": "/", "dest": "/" },
+    { "src": "/list", "dest": "/" },
+    { "src": "/video/1", "dest": "/" },
+    { "src": "/video/2", "dest": "/" },
+    { "src": "/video/3", "dest": "/" },
+    { "src": "/video/4", "dest": "/" },
+    { "src": "/video/5", "dest": "/" },
+    { "src": "/video/6", "dest": "/" },
+    { "src": "/video/7", "dest": "/" },
+    { "src": "/video/8", "dest": "/" },
+    { "src": "/video/9", "dest": "/" },
+    { "src": "/video/10", "dest": "/" },
+    { "src": "/video/11", "dest": "/" },
+    { "src": "/video/12", "dest": "/" },
+    { "src": "/video/13", "dest": "/" }
+  ]
+}

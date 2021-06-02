@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, {Component, useContext, useEffect, useState} from 'react';
+import React, {Component, useContext, useEffect, useRef, useState} from 'react';
 import classNames from 'classnames';
 import useHover from '@react-hook/hover';
 import {useClickAway} from 'react-use';
@@ -20,6 +20,9 @@ import { focusNode } from '../utils/dom';
 import { mergeAndSortChildren, isVideoChild, throttle } from '../utils';
 import fullscreen from '../utils/fullscreen';
 import useMobileDetect from 'use-mobile-detect-hook';
+import {useDebouncedCallback} from "use-debounce";
+import useMouse from '@react-hook/mouse-position'
+
 
 const propTypes = {
   children: PropTypes.any,
@@ -83,12 +86,45 @@ export const usePlayer = () => {
 const NewFunctionality = React.memo(
   React.forwardRef(({ player,playerRef, children, ...otherProps }, ref) => {
     const { onEnd, manager, actions } = otherProps;
+    const video = useRef(otherProps.video);
     const detectMobile = useMobileDetect();
     const isHovering = useHover(ref, { enterDelay: 200, leaveDelay: 200 });
     const [activeTooltip, setActiveTooltip] = useState({});
+    const [mouseMoved, setMouseMoved] = useState(false);
+    const wait = useRef();
+
+
     useClickAway(playerRef, () => {
-      actions.userActivate(false);
+      //actions.userActivate(false);
     });
+
+    useEffect(() => {
+      video.current = otherProps.video;
+    }, [otherProps.video])
+    const {isOver, x, y} = useMouse(otherProps.video, {
+      enterDelay: 200,
+      leaveDelay: 200,
+    })
+
+
+    useEffect(() => {
+      if (isOver) {
+        setMouseMoved(true)
+        if (wait.current) {
+          clearTimeout(wait.current);
+        }
+        wait.current = setTimeout(() => {
+          setMouseMoved(false)
+        }, 3000)
+      }
+    }, [x, y, isOver])
+
+    useEffect(() =>  {
+      if (isOver) {
+        actions.userActivate(mouseMoved);
+      }
+    }, [isOver,mouseMoved])
+
 
     useEffect(() => {
       if (!manager.mobile) {

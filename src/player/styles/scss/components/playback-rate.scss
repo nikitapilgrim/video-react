@@ -1,6 +1,7 @@
 .video-react {
   .video-react-playback-rate {
     width: auto;
+
     .video-react-playback-rate-value {
       display: flex;
       align-items: center;
@@ -12,12 +13,23 @@
       border-radius: 3px;
       width: 42px;
       height: 22px;
+      font-size: 12px;
+      font-weight: 500;
+      transition-duration: 0.25s;
+      &:hover {
+        border: 1px solid rgba(255,255,255,0.5);
+      }
     }
 
     .video-react-menu {
-      left: 0em;
+      width: 100%;
+      left: -8px;
       bottom: 24px;
+      font-size: 16px;
+      font-weight: 500;
+
     }
+
     .video-react-playback-rate {
 
     }

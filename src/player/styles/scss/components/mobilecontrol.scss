@@ -1,4 +1,23 @@
 .video-react-mobile {
+  position: relative;
+
+  .ui-video-seek-slider .thumb .handler {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .video-react-final-screen-show {
+    background: none;
+    pointer-events: none;
+    .video-react-final-screen__button {
+      pointer-events:auto;
+    }
+  }
+  .video-react-mobile-control__inner_hide {
+    opacity: 0;
+    pointer-events:none;
+  }
+
   .video-react-control-bar {
     background: none;
   }
@@ -15,13 +34,21 @@
     margin-left: 10px;
     .video-react-menu {
       bottom: 10px;
+      font-size: 16px;
+      font-weight: bold;
+
+      left: 0px;
+
+      li {
+        font-size: 16px;
+      }
 
     }
     @media (orientation: portrait) {
       .video-react-menu {
         bottom: 15px;
-        left: -15px;
-        transform: scale(0.7);
+
+
       }
     }
 
@@ -39,7 +66,7 @@
       text-align: center;
       color: #FFFFFF;
       @media (orientation: portrait) {
-        font-size: 11px;
+        font-size: 16px;
       }
 
     }
@@ -60,6 +87,10 @@
 
 .video-react {
   .video-react-mobile-control {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
     position: absolute;
     top: 0;
     left: 0;
@@ -95,6 +126,7 @@
       bottom: 0;
       height: 100%;
       width: 100%;
+      flex-grow: 1;
       z-index: 3;
       pointer-events: none;
       visibility: visible;
@@ -121,6 +153,7 @@
       align-items: center;
       justify-content: space-evenly;
       pointer-events: none;
+      transition-duration: 0.25s;
       & > div {
         pointer-events: auto;
       }

@@ -26,8 +26,8 @@ export const IconPlay = (props) => {
 export const IconPlayPause = React.forwardRef((props, ref) => {
   const { fill } = props;
   return (
-    <svg
-      style={{ height: '100%', width: '100%' }}
+    <animated.svg
+      style={{ height: '100%', width: '100%', pointerEvents: 'none' }}
       preserveAspectRatio="xMinYMin meet"
       ref={ref}
       viewBox="0 0 24 36"
@@ -56,6 +56,6 @@ export const IconPlayPause = React.forwardRef((props, ref) => {
       </defs>
       <use xlinkHref="#prefix__a" className="prefix__ytp-svg-shadow" />
       <use xlinkHref="#prefix__a" className="prefix__ytp-svg-fill" />
-    </svg>
+    </animated.svg>
   );
 });

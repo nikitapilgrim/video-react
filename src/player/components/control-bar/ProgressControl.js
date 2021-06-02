@@ -33,15 +33,18 @@ export default class ProgressControl extends Component {
     } = this.props;
 
     const node = document.getElementById('react-video-slider'); //this.seekBar;
-    const newTime = Dom.getPointerPosition(node, event).x * duration;
-    const position = event.pageX - Dom.findElPosition(node).left;
+    if (node) {
+      const newTime = Dom.getPointerPosition(node, event).x * duration;
+      const position = event.pageX - Dom.findElPosition(node).left;
 
-    this.setState({
-      mouseTime: {
-        time: newTime,
-        position,
-      },
-    });
+      this.setState({
+        mouseTime: {
+          time: newTime,
+          position,
+        },
+      });
+    }
+
   }
 
   render() {

@@ -6,6 +6,7 @@ import ReactTooltip from 'react-tooltip';
 import {usePlayer} from "../../components/Player";
 import useHover from "@react-hook/hover";
 import classNames from "classnames";
+import {useSpring} from "react-spring";
 
 const propTypes = {
   actions: PropTypes.object,
@@ -68,6 +69,10 @@ export default (mode) => {
         return 'На 10 секунд вперед';
       }
     };
+    const { fill } = useSpring({
+      ///fill: muted ? '#27AE60' : '#fff',
+      fill: isHovering ? '#fff': '#d9d9d9',
+    });
 
     const classNames = [
       'video-react-control',
@@ -93,8 +98,8 @@ export default (mode) => {
             type="button"
             onClick={onClick}
         >
-          {mode === 'forward' && <IconForward />}
-          {mode === 'replay' && <IconBack />}
+          {mode === 'forward' && <IconForward fill={fill} />}
+          {mode === 'replay' && <IconBack fill={fill} />}
 
           <span className="video-react-control-text">{`${mode} ${seconds} seconds`}</span>
         </button>

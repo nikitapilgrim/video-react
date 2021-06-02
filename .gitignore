@@ -59,3 +59,5 @@ example/out
 
 # lockfiles
 yarn.lock
+
+.vercel

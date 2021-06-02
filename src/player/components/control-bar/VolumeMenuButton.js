@@ -8,7 +8,7 @@ import { animated, Spring, useSpring } from 'react-spring';
 import ReactTooltip from 'react-tooltip';
 import useHover from '@react-hook/hover'
 import {usePlayer} from "../../components/Player";
-import {useClickAway} from 'react-use';
+import {useClickAway, useHoverDirty} from 'react-use';
 
 
 const tooltip = {
@@ -33,7 +33,7 @@ const Volume = ({ player, onClick, onFocus }) => {
   });
   const { fill } = useSpring({
     ///fill: muted ? '#27AE60' : '#fff',
-    fill: '#fff',
+    fill: isHovering ? '#fff': '#d9d9d9',
   });
 
   useEffect(() => {
@@ -94,7 +94,7 @@ const Volume = ({ player, onClick, onFocus }) => {
           {/*волны*/}
           <animated.path
             d="M19 5a10 10 0 010 14M16 8a5 5 0 010 8"
-            stroke="#fff"
+            stroke={fill}
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -188,9 +188,9 @@ class VolumeMenuButton extends Component {
             'video-react-vol-2': level === 2,
             'video-react-vol-3': level === 3,
             'video-react-slider-active':
-              this.props.alwaysShowVolume || !this.props.outsideClicked || this.state.active,
+              this.props.alwaysShowVolume /*|| !this.props.outsideClicked*/ || this.state.active,
             'video-react-lock-showing':
-              this.props.alwaysShowVolume || !this.props.outsideClicked || this.state.active,
+              this.props.alwaysShowVolume /*|| !this.props.outsideClicked*/ || this.state.active,
           },
           'video-react-volume-menu-button'
         )}
@@ -202,7 +202,8 @@ class VolumeMenuButton extends Component {
         inline={inline}
       >
         <VolumeBar
-
+            onFocus={this.handleFocus}
+            onBlur={this.handleBlur}
           {...this.props}
         />
       </PopupButton>
@@ -213,29 +214,28 @@ class VolumeMenuButton extends Component {
 
 export const HookLogic = (props) => {
  const [isActive, setIsActive] = useState();
+ const ref = useRef();
 
-  const clickOutside = useCallback((evt) => {
-    const flyoutElement = document.querySelector(".video-react-volume-menu-button");
-    let targetElement = evt.target; // clicked element
-    do {
-      if (targetElement == flyoutElement) {
-        setIsActive(false)
-        // This is a click inside. Do nothing, just return.
-        return;
-      }
-      // Go up the DOM
-      targetElement = targetElement.parentNode;
-    } while (targetElement);
+  const handleClick = useCallback(() => {
+   setIsActive(true)
+ }, [])
 
-    // This is a click outside.
-    setIsActive(true)
-  }, [])
+ useEffect(() => {
+   const flyoutElement = document.querySelector(".video-react-volume-menu-button");
+   if (flyoutElement) {
+     ref.current = flyoutElement;
+     flyoutElement.addEventListener('click', handleClick)
+     return () => {
+       flyoutElement.removeEventListener('click', handleClick)
+     }
+   }
+ }, [])
 
-  useEffect(() => {
-    //props.actions.userActivate(true);
-    document.addEventListener("click", clickOutside);
-    return () => document.removeEventListener('click', clickOutside);
-  }, [props.actions])
+  useClickAway(ref, () => {
+    setIsActive(false)
+  });
+
+
   return (
       <VolumeMenuButton outsideClicked={isActive} {...props}/>
   )

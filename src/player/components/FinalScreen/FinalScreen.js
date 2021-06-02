@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo } from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import { IconAgain } from '../../icons/Again';
 import classNames from 'classnames';
+import {usePlayer} from "../../components/Player";
 
-export const FinalScreen = ({ player, actions }) => {
+export const FinalScreen = ({ player, actions, manager}) => {
   const handleClickAgain = () => {
     actions.seek(0);
     actions.play();
@@ -14,11 +15,19 @@ export const FinalScreen = ({ player, actions }) => {
       player.duration === player.currentTime
     );
   }, [player]);
+  const prevSeek = useRef(null);
+
+/*
 
   useEffect(() => {
-    if (final) {
+    if (final && prevSeek.current) {
+      actions.play();
     }
-  }, [final]);
+    prevSeek.current = player.seeking;
+  }, [final, player.seeking])
+*/
+
+
 
   return (
     <div

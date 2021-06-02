@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import classNames from 'classnames';
 import useMobileDetect from 'use-mobile-detect-hook';
 
@@ -11,10 +11,13 @@ import { IconPause } from '../icons/Pause';
 import { IconAgain } from '../icons/Again';
 import ControlBar from './control-bar/ControlBar';
 import { ForwardControl, PlaybackRateMenuButton, ReplayControl } from '../';
+import { useDebouncedCallback } from 'use-debounce';
+
 
 export const MobileControls = ({ actions, ...other }) => {
   const player = usePlayer();
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(true);
+  const timer = useRef();
   const final = useMemo(() => {
     return (
       Number(player.duration) &&
@@ -22,6 +25,39 @@ export const MobileControls = ({ actions, ...other }) => {
       player.duration === player.currentTime
     );
   }, [player]);
+  const [topPanelActive, setTopPanelActive] = useState(true);
+
+  useEffect(() => {
+    if (final) {
+      setTopPanelActive(true)
+    }
+    if (!final) {
+      setTimeout(() => {
+        setTopPanelActive(false)
+      }, 500)
+    }
+  }, [final]);
+
+
+
+  const debounced = useDebouncedCallback(
+      // function
+      ({player, final}) => {
+        if (!player.paused && !player.seeking) {
+          setActive(false);
+        }
+        if (final) {
+          setActive(true)
+        }
+      },
+      // delay in ms
+      200
+  );
+
+
+  useEffect(() => {
+    debounced({player, final})
+  }, [player.paused, player.seeking, final])
 
   const Button = useMemo(() => {
     if (final) {
@@ -41,7 +77,9 @@ export const MobileControls = ({ actions, ...other }) => {
   };
 
   const handleOnClickTrigger = () => {
-    setActive((prev) => !prev);
+    if (!final){
+      setActive((prev) => !prev);
+    }
     actions.userActivate(true);
   };
 
@@ -76,12 +114,12 @@ export const MobileControls = ({ actions, ...other }) => {
           'video-react-mobile-control__content_hide': !active,
         })}
       >
-        <div className={'video-react-mobile-control__inner'}>
+        <div className={classNames('video-react-mobile-control__inner', {'video-react-mobile-control__inner_hide': topPanelActive})}>
           <button
             onClick={handleOnClickBack}
             className="video-react-mobile-control__back"
           >
-            <IconBack />
+            <IconBack fill={'#fff'} />
           </button>
           <button
             onClick={handleOnClickPlayPause}
@@ -93,7 +131,7 @@ export const MobileControls = ({ actions, ...other }) => {
             onClick={handleOnClickForward}
             className="video-react-mobile-control__forward"
           >
-            <IconForward />
+            <IconForward fill={'#fff'}/>
           </button>
         </div>
         <ControlBar {...other} actions={actions}>

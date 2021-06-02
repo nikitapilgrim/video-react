@@ -70,7 +70,7 @@ export const TooltipMenu = () => {
 
 
     return (
-        <div className={'video-react video-react__tooltip-wrapper'}>
+        <div className={'video-react__tooltip-wrapper'}>
             {tooltipList.filter(t => t.name).map((t) => <Tooltip {...t}/>)}
         </div>
     )

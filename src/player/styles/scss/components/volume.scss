@@ -6,6 +6,8 @@
 .video-react {
   .MuiSlider-root {
     color: #fff;
+    position: relative;
+    top: -1px;
   }
   .MuiSlider-rail {
     height: 3px;

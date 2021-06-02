@@ -99,7 +99,7 @@
 // By default this is hidden and only shown when hovering over the progress control
 
 .video-react {
-  .video-react-time-progress {
+  /*.video-react-time-progress {
     visibility: hidden;
     position: absolute;
     right: -22px;
@@ -129,7 +129,7 @@
       border-right: 6px solid transparent;
       border-top: 6px solid #000;
     }
-  }
+  }*/
 }
 
 .video-react .video-react-time-tooltip,
@@ -146,7 +146,7 @@
   padding: 2px 8px;
   background: #252E33;
   border-radius: 2px;
-  font-family: 'Lato', sans-serif;  font-style: normal;
+  font-family: 'Inter', sans-serif;  font-style: normal;
   font-weight: bold;
   font-size: 12px;
   line-height: 140%;

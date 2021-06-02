@@ -1,12 +1,12 @@
-html { height:100%; }
+html { min-height:100%; }
 body {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  min-height:100%;
+
 }
-#root {
-  overflow: hidden;
-}
-#root > div {
-  overflow: hidden;
+body::-webkit-scrollbar {
+  display: none;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }

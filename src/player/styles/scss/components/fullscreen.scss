@@ -10,6 +10,14 @@
     }
   }
 }
+.video-react-icon-fullscreen-exit {
+  &:hover {
+    .fullscreen-icon-svg {
+      transition-duration: 0.25s;
+      transform: scale(0.9);
+    }
+  }
+}
 
 
 .video-react.video-react-fullscreen {

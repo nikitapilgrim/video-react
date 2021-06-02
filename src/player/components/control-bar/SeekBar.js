@@ -7,6 +7,7 @@ import PlayProgressBar from './PlayProgressBar';
 import LoadProgressBar from './LoadProgressBar';
 import MouseTimeDisplay from './MouseTimeDisplay';
 import { formatTime } from '../../utils';
+import {VideoSeekSlider} from '../SeekSlider.tsx';
 
 const propTypes = {
   player: PropTypes.object,
@@ -83,15 +84,33 @@ export default class SeekBar extends Component {
     actions.replay(5);
   }
 
+  getBufferedTime() {
+    const {buffered, duration} = this.props.player
+    if (!buffered || !buffered.length) {
+      return 0;
+    }
+    let bufferedEnd = buffered.end(buffered.length - 1);
+    if (bufferedEnd > duration) {
+      bufferedEnd = duration;
+    }
+    return bufferedEnd;
+  }
+
   render() {
     const {
       player: { currentTime, seekingTime, duration, buffered },
       manager,
       mouseTime,
+      actions
     } = this.props;
     const time = seekingTime || currentTime;
+    const progress = this.getBufferedTime();
+    const player = this.props.player;
+    const final =  Number(player.duration) &&
+        player.duration > 0 &&
+        player.duration === player.currentTime
 
-    return (
+    /*return (
       <Slider
         ref={(input) => {
           this.slider = input;
@@ -124,7 +143,29 @@ export default class SeekBar extends Component {
 
         <PlayProgressBar currentTime={time} duration={duration} />
       </Slider>
-    );
+    );*/
+    return (
+        <VideoSeekSlider
+            max={duration}
+            currentTime={time}
+            progress={progress}
+            onChange={(time)=>{
+
+              actions.handleEndSeeking(time);
+              actions.seek(time);
+              if (final) {
+                actions.play();
+              }
+
+              /* this.setState({
+                 currentTime:time
+               });*/
+            }}
+            offset={0}
+            secondsPrefix="00:00:"
+        />
+
+    )
   }
 }
 

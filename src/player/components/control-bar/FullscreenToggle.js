@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React, {Component, useEffect} from 'react';
 import classNames from 'classnames';
 import { FullscreenOff, IconFullscreen } from '../../icons/Fullscreen';
-import ReactTooltip from 'react-tooltip';
 import {usePlayer} from "../../components/Player";
 import useHover from "@react-hook/hover";
+import {useSpring} from "react-spring";
 
 
 const propTypes = {
@@ -13,10 +13,15 @@ const propTypes = {
   className: PropTypes.string,
 };
 
-const Fullscreen = ({ player }) => {
+const Fullscreen = ({ player, isHovering}) => {
+  const { fill } = useSpring({
+    ///fill: muted ? '#27AE60' : '#fff',
+    fill: isHovering ? '#fff': '#d9d9d9',
+  });
+
   return (
     <div className={'fullscreen-icon-svg'}>
-      {!player.isFullscreen ? <IconFullscreen /> : <FullscreenOff />}
+      {!player.isFullscreen ? <IconFullscreen fill={fill} /> : <FullscreenOff fill={fill} />}
     </div>
   );
 };
@@ -85,7 +90,7 @@ const Button = React.forwardRef(({player, onClick, className}, ref) => {
           tabIndex="0"
           onClick={onClick}
       >
-        <Fullscreen player={player} />
+        <Fullscreen isHovering={isHovering} player={player} />
         <span className="video-react-control-text">Non-Fullscreen</span>
       </button>
   )
