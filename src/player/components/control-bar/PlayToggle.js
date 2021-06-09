@@ -3,15 +3,12 @@ import React, {Component, useEffect, useLayoutEffect, useMemo, useRef, useState}
 import classNames from 'classnames';
 import { IconPlay, IconPlayPause } from '../../icons/Play';
 import { IconPause } from '../../icons/Pause';
-import { MorphReplace } from 'react-svg-morph';
 import { Spring, animated, useSpring } from 'react-spring';
-import { interpolate } from 'flubber';
-import { tween } from 'popmotion';
-import posed from 'react-pose';
-import ReactTooltip from 'react-tooltip';
 import { IconAgain } from '../../icons/Again';
 import {usePlayer} from "../../components/Player";
 import useHover from "@react-hook/hover";
+import { useLottie } from "lottie-react";
+import playanim from "../../animations/play.json";
 
 
 const propTypes = {
@@ -20,71 +17,6 @@ const propTypes = {
   className: PropTypes.string,
 };
 
-const paths = {
-  on: 'M1 1l12 8-12 8V1z',
-  off: 'M2 2v12M10 2v12',
-};
-const pathIds = Object.keys(paths);
-
-const morphTransition = ({ from, to }) =>
-  tween({
-    from: 0,
-    to: 1,
-  }).pipe(interpolate(from, to));
-
-const Icon = posed.path(
-  pathIds.reduce((config, id) => {
-    config[id] = {
-      d: paths[id],
-      transition: morphTransition,
-      stroke: '#fff',
-      strokeWidth: 2,
-      strokeLinecap: 'round',
-      strokeLinejoin: 'round',
-    };
-
-    return config;
-  }, {})
-);
-const pause = 'M11,10 L17,10 17,26 11,26 M20,10 L26,10 26,26 20,26';
-const play = 'M11,10 L18,13.74 18,22.28 11,26 M18,13.74 L26,18 26,18 18,22.28';
-// M1 1l12 8-12 8V1z play
-//M2 2v12M10 2v12 pause
-
-/* stroke="#fff"
-        strokeWidth={4}
-        strokeLinecap="round"
-        strokeLinejoin="round"*/
-
-export const AnimatedPlayPause = ({ player, isHovering }) => {
-  const svg = useRef();
-  const flip = useRef(true);
-  const paused = useMemo(() => player.paused, [player.paused]);
-
-  const { fill } = useSpring({
-    fill: isHovering ? '#fff': '#d9d9d9',
-  });
-  /*const final = useMemo(() => {
-    return (
-        Number(player.duration) &&
-        player.duration > 0 &&
-        player.duration === player.currentTime
-    );
-  }, [player]);*/
-
-  useEffect(() => {
-    flip.current = !flip;
-    if (svg.current) {
-      const animation = svg.current.querySelector('animate');
-      if (animation) {
-        animation.setAttribute('from', paused ? pause : play);
-        animation.setAttribute('to', paused ? play : pause);
-        animation.beginElement();
-      }
-    }
-  }, [paused]);
-  return <IconPlayPause  fill={fill} ref={svg} />;
-};
 
 const isFinal = (player) =>
   Number(player.duration) &&
@@ -102,7 +34,6 @@ export default class PlayToggle extends Component {
 
   handleClick() {
     const { actions, player } = this.props;
-    console.log(player.paused)
     if (player.paused) {
       actions.play();
       this.setState((state) => ({
@@ -147,9 +78,63 @@ const Button = React.forwardRef(({player, onClick, className}, ref) => {
     condition: false,
   };
 
+  const options = {
+    animationData: playanim,
+    loop: false,
+    autoplay: false
+  };
+  const { View,animationItem, goToAndStop, goToAndPlay,  playSegments} = useLottie(options);
+  const svgPaths = useRef([])
+
+  useEffect(() => {
+    if (svgPaths.current.length === 0) {
+      if (animationItem && animationItem.hasOwnProperty('renderer')) {
+        const svg = animationItem.renderer.svgElement;
+        svgPaths.current = svg.querySelectorAll("path");
+        svgPaths.current.forEach(p => {
+          p.setAttribute("stroke", '#d9d9d9');
+          p.setAttribute("fill", '#d9d9d9');
+        })
+      }
+    }
+  },[animationItem])
+
+  const { fill } = useSpring({
+    fill: isHovering ? '#fff': '#d9d9d9',
+    onChange: ({value}) => {
+      svgPaths.current.forEach(p => {
+        p.setAttribute("stroke", value.fill);
+        p.setAttribute("fill", value.fill);
+      })
+    }
+  });
+
   useEffect(() => {
     setActiveTooltip({name: 'playpause',state: isHovering,text: textTooltip(player)})
   }, [isHovering, player])
+
+
+
+  useEffect(() => {
+    if (animationItem) {
+      const {markers} = animationItem;
+      const playStart = markers[0];
+      const playStop = markers[1];
+      const pauseStart = markers[2];
+      const pauseStop = markers[3];
+      const seg1 = [playStart.time, playStop.time];
+      const seg2 = [pauseStart.time, pauseStop.time];
+
+      if (player.paused) {
+        playSegments(seg2, true)
+      }
+      if (!player.paused) {
+        playSegments(seg1, true)
+      }
+    }
+
+  }, [player.paused, animationItem])
+
 
   return (
       <button
@@ -172,7 +157,7 @@ const Button = React.forwardRef(({player, onClick, className}, ref) => {
         {isFinal(player) ? (
             <IconAgain />
         ) : (
-            <AnimatedPlayPause isHovering={isHovering} player={player} />
+            <>{View}</>
         )}
         <span className="video-react-control-text">{controlText}</span>
       </button

@@ -1,8 +1,9 @@
 //@ts-nocheck
 import * as React from 'react';
-import {useMemo, useRef} from "react";
+import {useMemo, useRef, useState} from "react";
 import useComponentSize from '@rehooks/component-size'
 import {usePlayer} from './Player.js'
+import useHover from '@react-hook/hover'
 
 
 interface Time {
@@ -125,10 +126,10 @@ interface State {
     private handleTrackHover = (clear: boolean, e): void => {
         let position: number = e.pageX - this.track.getBoundingClientRect().left;
 
-        if (clear) {
+      /*  if (clear) {
             position = 0;
         }
-
+*/
         this.setState({
             seekHoverPosition: position
         } as State);
@@ -160,7 +161,6 @@ interface State {
 
     private getHoverTimePosition(): object {
         let position: number = 0;
-
         if (this.hoverTime) {
             position = this.state.seekHoverPosition - this.hoverTime.offsetWidth / 2;
 
@@ -172,7 +172,6 @@ interface State {
                 }
             }
         }
-
         return {
             transform: `translateX(${position}px)`
         }
@@ -209,6 +208,7 @@ interface State {
 
     private mouseSeekingHandler = (event: MouseEvent): void => {
         this.setSeeking(false, event);
+        //check
     };
 
     private setSeeking = (state: boolean, event: MouseEvent): void => {
@@ -216,9 +216,10 @@ interface State {
 
         this.handleSeeking(event);
         this.seeking = state;
+        const position = this.state.seekHoverPosition;
 
         this.setState({
-            seekHoverPosition: !state ? 0 : this.state.seekHoverPosition
+            seekHoverPosition: position
         } as State)
     };
 
@@ -228,9 +229,10 @@ interface State {
 
     private setMobileSeeking = (state: boolean): void => {
         this.mobileSeeking = state;
+        const position = !state ? 0 : this.state.seekHoverPosition
 
         this.setState({
-            seekHoverPosition: !state ? 0 : this.state.seekHoverPosition
+            seekHoverPosition: position
         } as State)
     };
 
@@ -242,7 +244,7 @@ interface State {
         if (!this.props.hideHoverTime) {
             return (
                 <div
-                    className={this.isThumbActive() ? "hover-time active" : "hover-time"}
+                    className={this.props.trackHover ? "hover-time active" : "hover-time"}
                     style={this.getHoverTimePosition()}
                     ref={ref => this.hoverTime = ref}
                 >
@@ -256,7 +258,7 @@ interface State {
         return (
             <div className="ui-video-seek-slider">
                 <div
-                    className={this.isThumbActive() ? "track active" : "track"}
+                    className={this.props.trackHover ? "track active" : "track"}
                     ref={ref => {
                         this.track = ref
                         this.props.track.current = ref;
@@ -287,7 +289,7 @@ interface State {
                 {!this.props.mobile && this.drawHoverTime()}
 
                 <div
-                    className={this.isThumbActive() ? "thumb active" : "thumb"}
+                    className={this.props.trackHover ? "thumb active" : "thumb"}
                     style={this.getThumbHandlerPosition()}
                 >
                     <div className="handler"/>
@@ -301,9 +303,11 @@ export const VideoSeekSlider = props => {
     const track = useRef();
     let size = useComponentSize(track)
     const player = usePlayer();
+    const [active, setActive] = useState();
     const isMobile = useMemo(() => player.detectMobile.isMobile(), []);
     // size == { width: 100, height: 200 }
     let { width, height } = size
+    const isHovering = useHover(track, {enterDelay: 200, leaveDelay: 200});
 
     let offset = useMemo(() => {
         if (track?.current?.offsetWidth) {
@@ -313,5 +317,5 @@ export const VideoSeekSlider = props => {
     }, [width])
 
 
-    return <VideoSeekSliderLegacy mobile={isMobile} trackWidth={offset} track={track} {...props}/>
+    return <VideoSeekSliderLegacy mobile={isMobile} trackWidth={offset} track={track} trackHover={isHovering} {...props}/>
 }

@@ -1,6 +1,11 @@
 .video-react-mobile {
   position: relative;
 
+  .ui-video-seek-slider .thumb {
+    height: 12px;
+    width: 12px;
+    top: 4px;
+  }
   .ui-video-seek-slider .thumb .handler {
     opacity: 1;
     transform: scale(1);
@@ -16,6 +21,7 @@
   .video-react-mobile-control__inner_hide {
     opacity: 0;
     pointer-events:none;
+
   }
 
   .video-react-control-bar {
@@ -139,6 +145,10 @@
         opacity: 0;
         visibility: hidden;
         background-color: rgba(17,19,18, 0);
+        * {
+          pointer-events: none !important;
+        }
+
       }
     }
 

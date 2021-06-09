@@ -1,4 +1,9 @@
 .video-react .video-react-play-control {
+  svg {
+    height: 24px !important;
+    width: 24px !important;
+  }
+
   cursor: pointer;
   @include flex(none);
   @extend .video-react-icon;

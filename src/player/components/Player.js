@@ -94,6 +94,7 @@ const NewFunctionality = React.memo(
     const wait = useRef();
 
 
+
     useClickAway(playerRef, () => {
       //actions.userActivate(false);
     });
@@ -123,14 +124,12 @@ const NewFunctionality = React.memo(
       if (isOver) {
         actions.userActivate(mouseMoved);
       }
-    }, [isOver,mouseMoved])
-
-
-    useEffect(() => {
-      if (!manager.mobile) {
+      if (!isOver && !manager.mobile) {
         actions.userActivate(isHovering);
       }
-    }, [isHovering, manager.mobile]);
+    }, [isOver,mouseMoved, manager.mobile, isHovering])
+
+
 
 
     useEffect(() => {

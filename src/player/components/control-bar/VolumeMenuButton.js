@@ -9,6 +9,8 @@ import ReactTooltip from 'react-tooltip';
 import useHover from '@react-hook/hover'
 import {usePlayer} from "../../components/Player";
 import {useClickAway, useHoverDirty} from 'react-use';
+import {useLottie} from "lottie-react";
+import sound from "../../animations/sound.json";
 
 
 const tooltip = {
@@ -25,16 +27,65 @@ const Volume = ({ player, onClick, onFocus }) => {
   const muted = useMemo(() => player.muted, [player]);
   const volume = useMemo(() => player.volume, [player]);
   const {tooltip: {setActiveTooltip}} = usePlayer();
-  const { opacity: opacityMuted } = useSpring({
-    opacity: muted ? 1 : 0,
-  });
-  const { opacity: opacityVolume } = useSpring({
-    opacity: volume > 0.1 && !muted ? 1 : 0,
-  });
+
+  const options = {
+    animationData: sound,
+    loop: false,
+    autoplay: false
+  };
+  const { View,animationItem, goToAndStop, goToAndPlay,  playSegments} = useLottie(options);
+
+  const svgPaths = useRef([])
+
+  useEffect(() => {
+    if (animationItem) {
+      const {markers} = animationItem;
+      const SoundStart = markers[0];
+      const SoundStop = markers[1];
+      const SoundOffStart = markers[2];
+      const SoundOffStop = markers[3];
+      const seg1 = [SoundStart.time, SoundStop.time];
+      const seg2 = [SoundOffStart.time, SoundOffStop.time];
+
+      if (muted) {
+        playSegments(seg1, true)
+      }
+      if (!muted) {
+        playSegments(seg2, true)
+      }
+    }
+
+  }, [muted, animationItem])
+
   const { fill } = useSpring({
-    ///fill: muted ? '#27AE60' : '#fff',
     fill: isHovering ? '#fff': '#d9d9d9',
+    onChange: ({value}) => {
+      svgPaths.current.forEach(p => {
+        p.setAttribute("stroke", value.fill);
+        p.setAttribute("fill", value.fill);
+      })
+    }
   });
+  useEffect(() => {
+    if (svgPaths.current.length === 0) {
+      if (animationItem && animationItem.hasOwnProperty('renderer')) {
+        const svg = animationItem.renderer.svgElement;
+        svgPaths.current = svg.querySelectorAll("path");
+        svgPaths.current.forEach(p => {
+          p.setAttribute("stroke", '#d9d9d9');
+          p.setAttribute("fill", '#d9d9d9');
+        })
+      }
+    }
+  },[animationItem])
+
+  /*
+    const { opacity: opacityMuted } = useSpring({
+      opacity: muted ? 1 : 0,
+    });
+    const { opacity: opacityVolume } = useSpring({
+      opacity: volume > 0.1 && !muted ? 1 : 0,
+    });*/
 
   useEffect(() => {
     if (isHovering) {
@@ -64,7 +115,7 @@ const Volume = ({ player, onClick, onFocus }) => {
         data-tip={player.muted ? 'Включить звук' : 'Отключение звука'}
         className={'video-react-volume'}
       >
-        <svg
+        {/*<svg
           width={24}
           height={24}
           viewBox="0 0 24 24"
@@ -80,7 +131,7 @@ const Volume = ({ player, onClick, onFocus }) => {
             strokeLinejoin="round"
           />
 
-          {/*off*/}
+          off
           <animated.path
             d="M22 9l-6 6M16 9l6 6"
             stroke={fill}
@@ -91,7 +142,7 @@ const Volume = ({ player, onClick, onFocus }) => {
             strokeOpacity={opacityMuted}
           />
 
-          {/*волны*/}
+          волны
           <animated.path
             d="M19 5a10 10 0 010 14M16 8a5 5 0 010 8"
             stroke={fill}
@@ -100,7 +151,8 @@ const Volume = ({ player, onClick, onFocus }) => {
             strokeLinejoin="round"
             strokeOpacity={opacityVolume}
           />
-        </svg>
+        </svg>*/}
+        <>{View}</>
 
         {/*{player.muted ? (
         <IconVolumeOff key={'voluneoff'} />

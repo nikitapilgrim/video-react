@@ -26,12 +26,15 @@ export default (mode) => {
     }
 
     handleClick() {
-      const { actions, seconds } = this.props;
+      const { actions, seconds, player } = this.props;
       // Depends mode to implement different actions
       if (mode === 'forward') {
         actions.forward(seconds);
       } else {
         actions.replay(seconds);
+      }
+      if (player.paused) {
+        actions.play();
       }
     }
 

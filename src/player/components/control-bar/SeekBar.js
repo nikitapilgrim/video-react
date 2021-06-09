@@ -162,7 +162,8 @@ export default class SeekBar extends Component {
                });*/
             }}
             offset={0}
-            secondsPrefix="00:00:"
+           /* secondsPrefix="00:00:"
+            minutesPrefix="00:"*/
         />
 
     )

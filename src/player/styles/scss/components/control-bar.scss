@@ -18,7 +18,7 @@
     width: 100%;
     height: 3px;
     background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 30px;
+    //border-radius: 30px;
     position: absolute;
     left: 0;
     top: 8.5px;
@@ -63,15 +63,16 @@
   }
 
   .ui-video-seek-slider .track.active .main {
-    transform: scaleY(2);
+    transform: scaleY(1.55);
   }
+
   .ui-video-seek-slider .thumb {
     pointer-events: none;
     position: absolute;
-    width: 12px;
-    height: 12px;
+    width: 13px;
+    height: 13px;
     left: -6px;
-    top: 4px;
+    top: 3.5px;
     z-index: 4;
     transform: translateX(100px);
   }
